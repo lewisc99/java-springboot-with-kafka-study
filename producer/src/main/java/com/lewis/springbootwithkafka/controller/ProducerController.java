@@ -21,7 +21,6 @@ public class ProducerController {
     @GetMapping("send")
     public void send()
     {
-          System.out.println(LocalDateTime.now());
           kafkaTemplate.send("topic-1","Olá Mundo" );
          //   count++;
     }

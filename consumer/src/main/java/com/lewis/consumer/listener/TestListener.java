@@ -10,11 +10,12 @@ import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
 public class TestListener {
 
     //encapsulate ConsumerRecordMetadata metadata only available kafka -v 2.5
-    @KafkaListener(topics = "topic-1",groupId = "group-1")
+    @KafkaListener(topics = "topic-1",groupId = "group-1", concurrency = "2")
     public void listen(String message, ConsumerRecordMetadata metadata)
     {
-     System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Message: " + message + " Offset: " + metadata.offset());
-        System.out.println("--------------------------------------------------------------------");
+     System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Message: " + message +
+             " Offset: " + metadata.offset() + " Thread: "+ Thread.currentThread().getId());
+     System.out.println("--------------------------------------------------------------------");
 
     }
 
@@ -23,7 +24,8 @@ public class TestListener {
     public void createPerson(Person person, ConsumerRecordMetadata metadata)
     {
         System.out.println("create Person");
-        System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName());
+        System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName()
+                + " Thread: "+ Thread.currentThread().getId());
         System.out.println("--------------------------------------------------------------------");
     }
 
@@ -32,7 +34,8 @@ public class TestListener {
     public void historyPerson(Person person, ConsumerRecordMetadata metadata)
     {
         System.out.println("historic listeneer");
-        System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName());
+        System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName()
+                + " Thread: "+ Thread.currentThread().getId());
         System.out.println("--------------------------------------------------------------------");
     }
 
