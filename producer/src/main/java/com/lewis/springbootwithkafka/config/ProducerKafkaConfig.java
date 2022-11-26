@@ -55,7 +55,7 @@ public class ProducerKafkaConfig {
     public NewTopic topic1()
     {
         //String name, int number of Partitions, short replicationFactor
-        return new NewTopic("topic-1", 10, Short.valueOf("1"));
+        return new NewTopic("topic-1", 2, Short.valueOf("1"));
 
         //kafka version 2.6
       //  return TopicBuilder.name("topic-1").build();
