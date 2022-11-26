@@ -4,6 +4,7 @@ import com.lewis.consumer.custom.PersonCustomListener;
 import com.lewis.consumer.models.Person;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
 
 @Configuration
@@ -37,6 +38,24 @@ public class TestListener {
         System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName()
                 + " Thread: "+ Thread.currentThread().getId());
         System.out.println("--------------------------------------------------------------------");
+    }
+
+
+    //0-5 or 0-5,9, 0,9
+    @KafkaListener(groupId = "my-group", topicPartitions = {@TopicPartition(topic = "my-topic", partitions = "0")})
+    public void listenPartition(String message, ConsumerRecordMetadata metadata)
+    {
+        System.out.println(" partition 0: " + metadata.partition() + " Message: " + message );
+        System.out.println("----------------------------------------------------------------------------");
+
+    }
+
+    @KafkaListener(groupId = "my-group", topicPartitions = {@TopicPartition(topic = "my-topic", partitions = "1-9")})
+    public void listenPartition2(String message, ConsumerRecordMetadata metadata)
+    {
+        System.out.println(" partition 1-9: " + metadata.partition() + " Message: " + message );
+        System.out.println("----------------------------------------------------------------------------");
+
     }
 
 

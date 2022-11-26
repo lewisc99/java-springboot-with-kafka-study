@@ -37,8 +37,9 @@ public class ProducerController {
     {
         System.out.println(LocalDateTime.now());
         kafkaTemplate.send("my-topic", "test" );
-
     }
+
+
 
 
 }
