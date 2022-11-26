@@ -32,5 +32,13 @@ public class ProducerController {
 
     }
 
+    @GetMapping("my-topic")
+    public void send2()
+    {
+        System.out.println(LocalDateTime.now());
+        kafkaTemplate.send("my-topic", "test" );
+
+    }
+
 
 }
