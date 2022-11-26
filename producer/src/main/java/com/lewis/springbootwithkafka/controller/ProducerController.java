@@ -13,11 +13,13 @@ public class ProducerController {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    private int count;
     @GetMapping("send")
     public ResponseEntity<String> send()
     {
-        kafkaTemplate.send("topic-1","Envio de: " + LocalDateTime.now());
 
+          kafkaTemplate.send("topic-1","Envio de: " + count );
+            count++;
         return ResponseEntity.ok().build();
     }
 }
