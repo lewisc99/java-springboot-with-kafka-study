@@ -1,5 +1,6 @@
 package com.lewis.consumer.listener;
 
+import com.lewis.consumer.custom.PersonCustomListener;
 import com.lewis.consumer.models.Person;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,16 +18,20 @@ public class TestListener {
 
     }
 
-    @KafkaListener(topics = "person-topic",groupId = "group-1", containerFactory = "personKafkaListenerContainerFactory")
+   // @KafkaListener(topics = "person-topic",groupId = "group-1", containerFactory = "personKafkaListenerContainerFactory")
+    @PersonCustomListener(groupId = "group-1")
     public void createPerson(Person person, ConsumerRecordMetadata metadata)
     {
+        System.out.println("create Person");
         System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName());
         System.out.println("--------------------------------------------------------------------");
     }
 
-    @KafkaListener(topics = "person-topic",groupId = "group-2", containerFactory = "personKafkaListenerContainerFactory")
+    @PersonCustomListener(groupId = "group-2")
+    // @KafkaListener(topics = "person-topic",groupId = "group-2", containerFactory = "personKafkaListenerContainerFactory")
     public void historyPerson(Person person, ConsumerRecordMetadata metadata)
     {
+        System.out.println("historic listeneer");
         System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName());
         System.out.println("--------------------------------------------------------------------");
     }
