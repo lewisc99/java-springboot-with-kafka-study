@@ -4,13 +4,6 @@ import com.lewis.consumer.models.Person;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.TimeZone;
-
 
 @Configuration
 public class TestListener {
@@ -25,9 +18,18 @@ public class TestListener {
     }
 
     @KafkaListener(topics = "person-topic",groupId = "group-1", containerFactory = "personKafkaListenerContainerFactory")
-    public void personListen(Person person, ConsumerRecordMetadata metadata)
+    public void createPerson(Person person, ConsumerRecordMetadata metadata)
     {
-        System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + "\n " + person.getName());
+        System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName());
         System.out.println("--------------------------------------------------------------------");
     }
+
+    @KafkaListener(topics = "person-topic",groupId = "group-2", containerFactory = "personKafkaListenerContainerFactory")
+    public void historyPerson(Person person, ConsumerRecordMetadata metadata)
+    {
+        System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName());
+        System.out.println("--------------------------------------------------------------------");
+    }
+
+
 }
