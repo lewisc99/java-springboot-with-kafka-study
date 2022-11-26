@@ -11,7 +11,7 @@ import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
 public class TestListener {
 
     //encapsulate ConsumerRecordMetadata metadata only available kafka -v 2.5
-    @KafkaListener(topics = "topic-1",groupId = "group-1", concurrency = "2")
+    @KafkaListener(topics = "topic-1",groupId = "group-1")
     public void listen(String message, ConsumerRecordMetadata metadata)
     {
      System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Message: " + message +
@@ -57,6 +57,8 @@ public class TestListener {
         System.out.println("----------------------------------------------------------------------------");
 
     }
+
+
 
 
 }
