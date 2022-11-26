@@ -1,4 +1,4 @@
-package com.lewis.springbootwithkafka.models;
+package com.lewis.consumer.models;
 
 
 import java.io.Serializable;
@@ -21,5 +21,4 @@ public class Person implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
 }

@@ -24,7 +24,6 @@ import java.util.Objects;
 @Configuration
 public class ProducerKafkaConfig {
 
-
     @Autowired
     private KafkaProperties kafkaProperties;
 
@@ -44,7 +43,6 @@ public class ProducerKafkaConfig {
         return  new KafkaTemplate<>(producerFactory());
     }
 
-
     @Bean
     public ProducerFactory<String,Object> jsonProducerFactory()
     {
@@ -55,14 +53,11 @@ public class ProducerKafkaConfig {
 
         return new DefaultKafkaProducerFactory<>(configs,new StringSerializer(), new JsonSerializer<>());
     }
-
     @Bean
     public KafkaTemplate<String, Serializable> JsonkafkaTemplate()
     {
         return  new KafkaTemplate(jsonProducerFactory());
     }
-
-
 
     @Bean
     public KafkaAdmin kafkaAdmin()
@@ -72,7 +67,6 @@ public class ProducerKafkaConfig {
 
         return new KafkaAdmin(configs);
     }
-
 //    @Bean
 //    public NewTopic topic1()
 //    {
@@ -82,7 +76,6 @@ public class ProducerKafkaConfig {
 //        //kafka version 2.6
 //      //  return TopicBuilder.name("topic-1").build();
 //    }
-
 
    // version kafka 2.7
     @Bean
