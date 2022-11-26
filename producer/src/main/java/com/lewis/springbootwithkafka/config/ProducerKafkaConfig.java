@@ -1,6 +1,7 @@
 package com.lewis.springbootwithkafka.config;
 
 
+import com.fasterxml.jackson.databind.JsonSerializable;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -14,7 +15,9 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -35,12 +38,31 @@ public class ProducerKafkaConfig {
 
         return new DefaultKafkaProducerFactory<>(configs);
     }
-
     @Bean
     public KafkaTemplate<String,String> kafkaTemplate()
     {
         return  new KafkaTemplate<>(producerFactory());
     }
+
+
+    @Bean
+    public ProducerFactory<String,Object> jsonProducerFactory()
+    {
+        var configs = new HashMap<String, Object>();
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers()); //will get the host of kafka
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializable.class);
+
+        return new DefaultKafkaProducerFactory<>(configs,new StringSerializer(), new JsonSerializer<>());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Serializable> JsonkafkaTemplate()
+    {
+        return  new KafkaTemplate(jsonProducerFactory());
+    }
+
+
 
     @Bean
     public KafkaAdmin kafkaAdmin()
@@ -51,29 +73,28 @@ public class ProducerKafkaConfig {
         return new KafkaAdmin(configs);
     }
 
-    @Bean
-    public NewTopic topic1()
-    {
-        //String name, int number of Partitions, short replicationFactor
-        return new NewTopic("topic-1", 2, Short.valueOf("1"));
+//    @Bean
+//    public NewTopic topic1()
+//    {
+//        //String name, int number of Partitions, short replicationFactor
+//        return new NewTopic("topic-1", 2, Short.valueOf("1"));
+//
+//        //kafka version 2.6
+//      //  return TopicBuilder.name("topic-1").build();
+//    }
 
-        //kafka version 2.6
-      //  return TopicBuilder.name("topic-1").build();
+
+   // version kafka 2.7
+    @Bean
+    public KafkaAdmin.NewTopics topics()
+    {
+        return new KafkaAdmin.NewTopics(
+
+                TopicBuilder.name("topic-1").partitions(2).replicas(1).build(),
+                TopicBuilder.name("person-topic").partitions(2).build()
+        );
     }
 
-
-    //version kafka 2.7
-//    @Bean
-//    public KafkaAdmin.NewTopics topics()
-//    {
-//        return new KafkaAdmin.NewTopics(
-//
-//                TopicBuilder.name("topic-1").build(),
-//                TopicBuilder.name("topic-2").build(),
-//                TopicBuilder.name("topic-3").build()
-//        );
-//    }
-//
 
 
 }

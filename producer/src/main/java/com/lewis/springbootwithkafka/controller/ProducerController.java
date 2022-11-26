@@ -1,6 +1,5 @@
 package com.lewis.springbootwithkafka.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,13 +12,13 @@ public class ProducerController {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    private int count;
+//    private int count;
     @GetMapping("send")
-    public ResponseEntity<String> send()
+    public void send()
     {
-
-          kafkaTemplate.send("topic-1","Envio de: " + count );
-            count++;
-        return ResponseEntity.ok().build();
+          System.out.println(LocalDateTime.now());
+          kafkaTemplate.send("topic-1","Olá Mundo" );
+         //   count++;
     }
+
 }
