@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/consumer/consumer.iml" filepath="$PROJECT_DIR$/consumer/consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/second-consumer/second-consumer.iml" filepath="$PROJECT_DIR$/second-consumer/second-consumer.iml" />
       <module fileurl="file://$PROJECT_DIR$/producer/springboot-with-kafka.iml" filepath="$PROJECT_DIR$/producer/springboot-with-kafka.iml" />
     </modules>
   </component>

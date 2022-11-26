@@ -8,16 +8,19 @@
         <outputRelativeToContentRoot value="true" />
         <module name="springboot-with-kafka" />
         <module name="consumer" />
+        <module name="second-consumer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="consumer" target="11" />
+      <module name="second-consumer" target="11" />
       <module name="springboot-with-kafka" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="consumer" options="-parameters" />
+      <module name="second-consumer" options="-parameters" />
       <module name="springboot-with-kafka" options="-parameters" />
     </option>
   </component>
