@@ -85,6 +85,7 @@ public class ProducerKafkaConfig {
 
                 TopicBuilder.name("topic-1").partitions(2).replicas(1).build(),
                 TopicBuilder.name("person-topic").partitions(2).build(),
+                TopicBuilder.name("city-topic").partitions(2).build(),
                 TopicBuilder.name("my-topic").partitions(2).build()
         );
     }

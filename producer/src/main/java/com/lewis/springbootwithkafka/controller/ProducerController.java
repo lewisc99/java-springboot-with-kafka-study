@@ -1,5 +1,6 @@
 package com.lewis.springbootwithkafka.controller;
 
+import com.lewis.springbootwithkafka.models.City;
 import com.lewis.springbootwithkafka.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -39,6 +40,12 @@ public class ProducerController {
         kafkaTemplate.send("my-topic", "test" );
     }
 
+    @GetMapping("send-city")
+    public void sendCity()
+    {
+        jsonKafkaTemplate.send("city-topic", new City("Minas Gerais","MG")  );
+
+    }
 
 
 
