@@ -1,6 +1,7 @@
 package com.lewis.consumer.listener;
 
 import com.lewis.consumer.custom.PersonCustomListener;
+import com.lewis.consumer.models.City;
 import com.lewis.consumer.models.Person;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -58,6 +59,12 @@ public class TestListener {
 
     }
 
+    @KafkaListener(groupId = "group-1", topics = "city-topic", containerFactory = "jsonkafkaListenerContainerFactory")
+    public void createCity(City city, ConsumerRecordMetadata metadata)
+    {
+        System.out.println(" partition 1-9: " + metadata.partition() + " City: " + city.getName() + " UF: "+ city.getUF() );
+        System.out.println("----------------------------------------------------------------------------");
+    }
 
 
 
