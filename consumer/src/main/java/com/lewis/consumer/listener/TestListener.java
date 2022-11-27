@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 
 import java.util.List;
 
@@ -53,7 +55,18 @@ public class TestListener {
         System.out.println("--------------------------------------------------------------------");
 
 
-   // throw new IllegalArgumentException("Fail listener");
+   throw new IllegalArgumentException("Fail listener");
+
+    }
+
+    @PersonCustomListener(groupId = "group-2", topics = "person-topic.DLT")
+    // @KafkaListener(topics = "person-topic",groupId = "group-2", containerFactory = "personKafkaListenerContainerFactory")
+    public void historyPersonDLQ(Person person, ConsumerRecordMetadata metadata)
+    {
+
+        System.out.println("historic listener DLT " + person.getName());
+        System.out.println("--------------------------------------------------------------------");
+
 
     }
 

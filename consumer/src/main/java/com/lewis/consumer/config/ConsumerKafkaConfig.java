@@ -1,24 +1,28 @@
 package com.lewis.consumer.config;
 
 
+import com.fasterxml.jackson.databind.JsonSerializable;
 import com.lewis.consumer.models.Person;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.CommonErrorHandler;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.listener.RecordInterceptor;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
@@ -104,13 +108,26 @@ public class ConsumerKafkaConfig {
 //          factory.setRecordInterceptor(exampleInterceptor());
         return factory;
     }
-
     //default is 1 try and then 9 try
     //custom 1 try in 1 sec, and maxAttemps 2 try
     private CommonErrorHandler defaultErrorHandler() {
-      // return new DefaultErrorHandler(new FixedBackOff(100l,9)); default
-        return new DefaultErrorHandler(new FixedBackOff(100l,2));
+        // return new DefaultErrorHandler(new FixedBackOff(100l,9)); default
+        var recoverer = new DeadLetterPublishingRecoverer(new KafkaTemplate<>(deadLetterFactory()));
+        return new DefaultErrorHandler(recoverer,new FixedBackOff(100l,2));
     }
+
+
+    public ProducerFactory<String, Person> deadLetterFactory()
+    {
+        var configs = new HashMap<String, Object>();
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers()); //will get the host of kafka
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializable.class);
+
+        return new DefaultKafkaProducerFactory<>(configs,new StringSerializer(), new JsonSerializer<>());
+    }
+
+
 
     private RecordInterceptor<String, Person> exampleInterceptor() {
 

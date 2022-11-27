@@ -2,6 +2,7 @@ package com.lewis.springbootwithkafka.config;
 
 
 import com.fasterxml.jackson.databind.JsonSerializable;
+import com.lewis.springbootwithkafka.models.Person;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -57,6 +58,10 @@ public class ProducerKafkaConfig {
 
         return new DefaultKafkaProducerFactory<>(configs,new StringSerializer(), new JsonSerializer<>());
     }
+
+
+
+
     @Bean
     public KafkaTemplate<String, Serializable> JsonkafkaTemplate()
     {
@@ -89,6 +94,7 @@ public class ProducerKafkaConfig {
 
                 TopicBuilder.name("topic-1").partitions(2).replicas(1).build(),
                 TopicBuilder.name("person-topic").partitions(2).build(),
+                TopicBuilder.name("person-topic.DLT").partitions(2).build(),
                 TopicBuilder.name("city-topic").partitions(2).build(),
                 TopicBuilder.name("my-topic").partitions(2).build()
         );
