@@ -46,10 +46,14 @@ public class TestListener {
     // @KafkaListener(topics = "person-topic",groupId = "group-2", containerFactory = "personKafkaListenerContainerFactory")
     public void historyPerson(Person person, ConsumerRecordMetadata metadata)
     {
+
         System.out.println("historic listeneer");
         System.out.println("Topic " + metadata.topic() + " partition: " + metadata.partition() + " Person: " + person.getName()
                 + " Thread: "+ Thread.currentThread().getId());
         System.out.println("--------------------------------------------------------------------");
+
+      //  throw new IllegalArgumentException("Fail listener");
+
     }
 
 

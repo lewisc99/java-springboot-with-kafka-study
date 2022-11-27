@@ -2,7 +2,9 @@ package com.lewis.consumer.config;
 
 
 import com.lewis.consumer.models.Person;
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -44,7 +46,7 @@ public class ConsumerKafkaConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String,String>();
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(2);
-     //  factory.setBatchListener(true); // send messages in list (lote). 
+     //  factory.setBatchListener(true); // send messages in list (lote).
         return factory;
     }
 
@@ -94,8 +96,33 @@ public class ConsumerKafkaConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String,Person>();
 
         factory.setConsumerFactory(personConsumerFactory());
-        factory.setRecordInterceptor(adultInterceptor());
+       // factory.setRecordInterceptor(adultInterceptor());
+          factory.setRecordInterceptor(exampleInterceptor());
         return factory;
+    }
+
+    private RecordInterceptor<String, Person> exampleInterceptor() {
+
+        return new RecordInterceptor<String, Person>() {
+            @Override
+            public ConsumerRecord<String, Person> intercept(ConsumerRecord<String, Person> consumerRecord) {
+                return consumerRecord;
+            }
+
+            @Override
+            public void success(final ConsumerRecord<String,Person> record, final Consumer<String,Person> consumer)
+            {
+              System.out.println("Succcess");
+            }
+            //you can implement another method similar to this intercept
+
+            @Override
+            public void failure(final ConsumerRecord<String,Person> record, final Exception exception,final Consumer<String,Person> consumer)
+            {
+                System.out.println("Fail");
+            }
+        };
+
     }
 
     private RecordInterceptor<String, Person> adultInterceptor() {
