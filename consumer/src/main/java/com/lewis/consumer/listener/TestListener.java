@@ -55,7 +55,7 @@ public class TestListener {
         System.out.println("--------------------------------------------------------------------");
 
 
-   throw new IllegalArgumentException("Fail listener");
+ //  throw new IllegalArgumentException("Fail listener");
 
     }
 
@@ -64,9 +64,8 @@ public class TestListener {
     public void historyPersonDLQ(Person person, ConsumerRecordMetadata metadata)
     {
 
-        System.out.println("historic listener DLT " + person.getName());
+        System.out.println("historic listener DLT " + person.getName() + "partition: "+ metadata.partition());
         System.out.println("--------------------------------------------------------------------");
-
 
     }
 

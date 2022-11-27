@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +113,10 @@ public class ConsumerKafkaConfig {
     //custom 1 try in 1 sec, and maxAttemps 2 try
     private CommonErrorHandler defaultErrorHandler() {
         // return new DefaultErrorHandler(new FixedBackOff(100l,9)); default
-        var recoverer = new DeadLetterPublishingRecoverer(new KafkaTemplate<>(deadLetterFactory()));
+        var recoverer = new DeadLetterPublishingRecoverer(new KafkaTemplate<>(deadLetterFactory()),((consumerRecord, exception) ->
+        {
+            return new TopicPartition(consumerRecord.topic() + ".DLT", -1);
+        }));
         return new DefaultErrorHandler(recoverer,new FixedBackOff(100l,2));
     }
 
