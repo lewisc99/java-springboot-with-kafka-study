@@ -14,9 +14,12 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.CommonErrorHandler;
+import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.listener.RecordInterceptor;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 
@@ -96,9 +99,17 @@ public class ConsumerKafkaConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String,Person>();
 
         factory.setConsumerFactory(personConsumerFactory());
+        factory.setCommonErrorHandler(defaultErrorHandler());
        // factory.setRecordInterceptor(adultInterceptor());
-          factory.setRecordInterceptor(exampleInterceptor());
+//          factory.setRecordInterceptor(exampleInterceptor());
         return factory;
+    }
+
+    //default is 1 try and then 9 try
+    //custom 1 try in 1 sec, and maxAttemps 2 try
+    private CommonErrorHandler defaultErrorHandler() {
+      // return new DefaultErrorHandler(new FixedBackOff(100l,9)); default
+        return new DefaultErrorHandler(new FixedBackOff(100l,2));
     }
 
     private RecordInterceptor<String, Person> exampleInterceptor() {
