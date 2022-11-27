@@ -35,6 +35,7 @@ public class ProducerKafkaConfig {
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
+
         return new DefaultKafkaProducerFactory<>(configs);
     }
     @Bean
@@ -43,7 +44,10 @@ public class ProducerKafkaConfig {
         return  new KafkaTemplate<>(producerFactory());
     }
 
-    @Bean
+
+
+
+  @Bean
     public ProducerFactory<String,Object> jsonProducerFactory()
     {
         var configs = new HashMap<String, Object>();

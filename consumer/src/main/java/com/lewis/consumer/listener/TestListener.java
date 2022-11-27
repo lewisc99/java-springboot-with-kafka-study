@@ -8,6 +8,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
 
+import java.util.List;
+
 @Configuration
 public class TestListener {
 
@@ -20,6 +22,15 @@ public class TestListener {
      System.out.println("--------------------------------------------------------------------");
 
     }
+
+    //messaging in lot string (list of messages)
+//    @KafkaListener(topics = "topic-1",groupId = "group-1")
+//    public void listen(List<String> message)
+//    {
+//        System.out.println(message);
+//        System.out.println("--------------------------------------------------------------------");
+//
+//    }
 
    // @KafkaListener(topics = "person-topic",groupId = "group-1", containerFactory = "personKafkaListenerContainerFactory")
     @PersonCustomListener(groupId = "group-1")
